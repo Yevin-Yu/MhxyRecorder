@@ -413,6 +413,10 @@ onMounted(() => {
 <style>
 .detail-dialog.el-dialog {
   padding: 0;
+  background: rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
 }
 .detail-dialog .el-dialog__body {
   margin: 24px 0;
@@ -422,18 +426,30 @@ onMounted(() => {
   overflow-y: auto;
 }
 </style>
-<style scoped>
+<style lang="less" scoped>
+@import '../styles/variables.less';
 .record-list {
-  height: calc(100vh - 64px);
-  margin: 16px;
+  width: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 0;
+  margin: 0;
 }
 
 .record-card {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.06),
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  position: relative;
 }
 
 .record-card :deep(.el-card__body) {
@@ -453,15 +469,17 @@ onMounted(() => {
 
 .header-title h3 {
   margin: 0 0 4px 0;
-  color: #2c3e50;
+  color: @text-primary;
   font-size: 20px;
   font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .header-subtitle {
   margin: 0;
-  color: #7f8c8d;
+  color: @text-secondary;
   font-size: 14px;
+  letter-spacing: 0.2px;
 }
 
 .header-actions {
@@ -484,39 +502,64 @@ onMounted(() => {
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.6) 20%, 
+    rgba(255, 255, 255, 0.8) 50%, 
+    rgba(255, 255, 255, 0.6) 80%, 
+    transparent 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .overview-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  opacity: 0.95;
 }
 
 .overview-card.total-days {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%);
 }
 
 .overview-card.total-time {
-  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+  background: linear-gradient(135deg, rgba(82, 196, 26, 0.7) 0%, rgba(56, 158, 13, 0.7) 100%);
 }
 
 .overview-card.total-income {
-  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  background: linear-gradient(135deg, rgba(24, 144, 255, 0.7) 0%, rgba(9, 109, 217, 0.7) 100%);
 }
 
 .overview-card.total-balance {
-  background: linear-gradient(135deg, #722ed1 0%, #531dab 100%);
+  background: linear-gradient(135deg, rgba(114, 46, 209, 0.7) 0%, rgba(83, 29, 171, 0.7) 100%);
 }
 
 .overview-icon {
   width: 48px;
   height: 48px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 16px;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 2;
 }
 
 .overview-content {
@@ -547,7 +590,7 @@ onMounted(() => {
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  color: #7f8c8d;
+  color: @text-secondary;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -557,21 +600,24 @@ onMounted(() => {
 }
 
 .empty-icon {
-  color: #d9d9d9;
+  color: @text-tertiary;
   margin-bottom: 24px;
+  opacity: 0.6;
 }
 
 .empty-title {
   font-size: 20px;
   font-weight: 500;
-  color: #7f8c8d;
+  color: @text-secondary;
   margin: 0 0 12px 0;
+  letter-spacing: 0.3px;
 }
 
 .empty-text {
   font-size: 16px;
-  color: #bfbfbf;
+  color: @text-tertiary;
   margin: 0 0 24px 0;
+  opacity: 0.8;
 }
 
 /* 表格样式 */
@@ -579,18 +625,22 @@ onMounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  border: 1px solid #e4e7ed;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   min-width: 0; /* 允许表格收缩 */
 }
 
 .table-header {
   display: grid;
   grid-template-columns: minmax(120px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr);
-  background: #f5f7fa;
-  border-bottom: 1px solid #e4e7ed;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   flex-shrink: 0;
   min-width: 0; /* 允许表头收缩 */
 }
@@ -598,8 +648,9 @@ onMounted(() => {
 .header-cell {
   padding: 12px 16px;
   font-weight: 600;
-  color: #606266;
+  color: @text-primary;
   font-size: 14px;
+  letter-spacing: 0.2px;
   display: flex;
   align-items: center;
   border-right: 1px solid #e4e7ed;
@@ -639,13 +690,14 @@ onMounted(() => {
 .table-row {
   display: grid;
   grid-template-columns: minmax(120px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr);
-  border-bottom: 1px solid #e4e7ed;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   transition: background-color 0.2s ease;
   min-width: 0; /* 允许行收缩 */
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .table-row:hover {
-  background-color: #f5f7fa;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .table-row:last-child {
@@ -658,7 +710,7 @@ onMounted(() => {
   align-items: center;
   border-right: 1px solid #e4e7ed;
   font-size: 14px;
-  color: #606266;
+  color: @text-primary;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -673,7 +725,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #303133;
+  color: @text-primary;
   font-weight: 500;
 }
 
@@ -755,7 +807,7 @@ onMounted(() => {
 
 .detail-header h3 {
   margin: 0;
-  color: #2c3e50;
+  color: @text-primary;
   font-size: 20px;
   font-weight: 600;
 }
@@ -767,21 +819,23 @@ onMounted(() => {
 .detail-stat {
   text-align: center;
   padding: 16px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .detail-stat-label {
   font-size: 14px;
-  color: #7f8c8d;
+  color: @text-secondary;
   margin-bottom: 8px;
 }
 
 .detail-stat-value {
   font-size: 18px;
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
 }
 
 .detail-stat-value.positive {
@@ -798,7 +852,7 @@ onMounted(() => {
 
 .detail-section h4 {
   margin: 0 0 16px 0;
-  color: #2c3e50;
+  color: @text-primary;
   font-size: 16px;
   font-weight: 600;
   display: flex;
@@ -865,7 +919,7 @@ onMounted(() => {
 
 .detail-item-name {
   font-size: 14px;
-  color: #2c3e50;
+  color: @text-primary;
   font-weight: 500;
   margin-bottom: 4px;
 }
@@ -929,7 +983,7 @@ onMounted(() => {
   display: flex;
   gap: 16px;
   font-size: 12px;
-  color: #7f8c8d;
+  color: @text-secondary;
 }
 
 .detail-session-cost {
@@ -941,10 +995,12 @@ onMounted(() => {
 /* 详情表格样式 */
 .detail-table-container {
   margin-top: 16px;
-  border: 1px solid #e4e7ed;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   min-width: 0; /* 允许表格收缩 */
 }
 
@@ -957,8 +1013,10 @@ onMounted(() => {
 
 .detail-table-header {
   display: grid;
-  background: #f5f7fa;
-  border-bottom: 1px solid #e4e7ed;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   flex-shrink: 0;
   min-width: 0; /* 允许表头收缩 */
 }
@@ -966,7 +1024,7 @@ onMounted(() => {
 .detail-header-cell {
   padding: 12px 16px;
   font-weight: 600;
-  color: #606266;
+  color: @text-primary;
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -1007,13 +1065,14 @@ onMounted(() => {
 
 .detail-table-row {
   display: grid;
-  border-bottom: 1px solid #e4e7ed;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   transition: background-color 0.2s ease;
   min-width: 0; /* 允许行收缩 */
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .detail-table-row:hover {
-  background-color: #f5f7fa;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .detail-table-row:last-child {
@@ -1026,7 +1085,7 @@ onMounted(() => {
   align-items: center;
   border-right: 1px solid #e4e7ed;
   font-size: 14px;
-  color: #606266;
+  color: @text-primary;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1056,111 +1115,4 @@ onMounted(() => {
   border-radius: 4px;
 }
 
-/* 响应式设计 */
-@media (max-width: 1200px) {
-  .table-header,
-  .table-row {
-    grid-template-columns: minmax(100px, 1fr) minmax(70px, 1fr) minmax(70px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(70px, 1fr) minmax(70px, 1fr) minmax(80px, 1fr);
-  }
-  
-  .header-cell,
-  .table-cell {
-    padding: 10px 12px;
-    font-size: 13px;
-  }
-  
-  .action-buttons {
-    flex-direction: column;
-    gap: 4px;
-  }
-  
-  .action-buttons .el-button {
-    padding: 4px 8px;
-    font-size: 12px;
-  }
-  
-  /* 详情表格响应式 */
-  .items-table .detail-table-header,
-  .items-table .detail-table-row {
-    grid-template-columns: minmax(50px, 1fr) minmax(100px, 2fr) minmax(70px, 1fr) minmax(50px, 1fr);
-  }
-  
-  .sessions-table .detail-table-header,
-  .sessions-table .detail-table-row {
-    grid-template-columns: minmax(80px, 1fr) minmax(70px, 1fr) minmax(70px, 1fr) minmax(70px, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .table-header,
-  .table-row {
-    grid-template-columns: minmax(80px, 1fr) minmax(60px, 1fr) minmax(60px, 1fr) minmax(70px, 1fr) minmax(70px, 1fr) minmax(60px, 1fr) minmax(60px, 1fr) minmax(70px, 1fr);
-  }
-  
-  .header-cell,
-  .table-cell {
-    padding: 8px 10px;
-    font-size: 12px;
-  }
-  
-  .date-content {
-    flex-direction: column;
-    gap: 4px;
-    align-items: flex-start;
-  }
-  
-  .date-content .el-icon {
-    display: none;
-  }
-  
-  .overview-card {
-    padding: 16px;
-  }
-  
-  .overview-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 12px;
-  }
-  
-  .overview-number {
-    font-size: 20px;
-  }
-  
-  .overview-label {
-    font-size: 12px;
-  }
-  
-  /* 详情表格响应式 */
-  .detail-table-header,
-  .detail-table-row {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  
-  .detail-header-cell,
-  .detail-table-cell {
-    border-right: none;
-    border-bottom: 1px solid #e4e7ed;
-    padding: 8px 12px;
-  }
-  
-  .detail-header-cell:last-child,
-  .detail-table-cell:last-child {
-    border-bottom: none;
-  }
-  
-  .items-table .detail-table-header,
-  .items-table .detail-table-row,
-  .sessions-table .detail-table-header,
-  .sessions-table .detail-table-row {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  
-  .item-icon {
-    width: 24px;
-    height: 24px;
-  }
-}
 </style>

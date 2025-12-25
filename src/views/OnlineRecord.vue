@@ -3,50 +3,67 @@
     <el-card class="record-card">
       <template #header>
         <div class="card-header">
-          <div class="header-actions">
-            <div class="setting-button-container">
-              <el-popover placement="bottom" width="240" trigger="hover" ref="accountPopover">
-                <template #reference>
-                  <el-button class="action-button setting-button">
-                    在线角色：{{ currentSetData.onlineAccounts }}
-                  </el-button>
-                </template>
-                <div class="setting-popover">
-                  <div class="setting-title">设置在线账号数</div>
-                  <el-input-number class="input-number" v-model="currentSetData.onlineAccounts" :min="1" :max="20"
-                    label="账号数量" size="large"></el-input-number>
+          <div class="header-left">
+            <el-popover placement="bottom-start" width="280" trigger="click" ref="accountPopover">
+              <template #reference>
+                <div class="setting-item">
+                  <el-icon class="setting-icon">
+                    <User />
+                  </el-icon>
+                  <span class="setting-label">在线角色</span>
+                  <span class="setting-value">{{ currentSetData.onlineAccounts }}</span>
+                  <el-icon class="setting-arrow">
+                    <ArrowDown />
+                  </el-icon>
                 </div>
-              </el-popover>
-              <el-popover placement="bottom" width="240" trigger="hover" ref="cardPricePopover">
-                <template #reference>
-                  <el-button class="action-button setting-button">
-                    点卡价格：{{ currentSetData.cardPrice }}
-                  </el-button>
-                </template>
-                <div class="setting-popover">
-                  <div class="setting-title">设置点卡价格</div>
-                  <el-input-number class="input-number" v-model="currentSetData.cardPrice" :min="1000" :step="1000"
-                    label="价格" size="large"></el-input-number>
+              </template>
+              <div class="setting-popover">
+                <div class="setting-title">设置在线账号数</div>
+                <el-input-number v-model="currentSetData.onlineAccounts" :min="1" :max="20" :controls="true"
+                  class="setting-input" />
+              </div>
+            </el-popover>
+            <el-popover placement="bottom-start" width="280" trigger="click" ref="cardPricePopover">
+              <template #reference>
+                <div class="setting-item">
+                  <el-icon class="setting-icon">
+                    <Money />
+                  </el-icon>
+                  <span class="setting-label">点卡价格</span>
+                  <span class="setting-value">{{ currentSetData.cardPrice.toLocaleString() }}</span>
+                  <el-icon class="setting-arrow">
+                    <ArrowDown />
+                  </el-icon>
                 </div>
-              </el-popover>
+              </template>
+              <div class="setting-popover">
+                <div class="setting-title">设置点卡价格</div>
+                <el-input-number v-model="currentSetData.cardPrice" :min="1000" :step="1000" :controls="true"
+                  class="setting-input" />
+              </div>
+            </el-popover>
+          </div>
+          <div class="header-right">
+            <div v-if="isOnline" class="online-status">
+              <el-icon class="status-icon">
+                <Clock />
+              </el-icon>
+              <span class="status-text">当前在线：{{ currentDuration }}</span>
             </div>
-            <div class="action-button-container">
-              <span v-if="isOnline" class="online-duration"> 当前在线：{{ currentDuration }} </span>
-              <el-button v-if="!isOnline" type="primary" @click="startOnline" class="action-button start-button"
-                :loading="isStarting">
-                <el-icon>
-                  <VideoPlay />
-                </el-icon>
-                开始游戏
-              </el-button>
-              <el-button v-if="isOnline" type="danger" @click="endOnline" class="action-button end-button"
-                :loading="isEnding">
-                <el-icon>
-                  <VideoPause />
-                </el-icon>
-                结束游戏
-              </el-button>
-            </div>
+            <el-button v-if="!isOnline" type="primary" @click="startOnline" class="control-button start-button"
+              :loading="isStarting" size="large">
+              <el-icon>
+                <VideoPlay />
+              </el-icon>
+              <span>开始游戏</span>
+            </el-button>
+            <el-button v-if="isOnline" type="danger" @click="endOnline" class="control-button end-button"
+              :loading="isEnding" size="large">
+              <el-icon>
+                <VideoPause />
+              </el-icon>
+              <span>结束游戏</span>
+            </el-button>
           </div>
         </div>
       </template>
@@ -242,7 +259,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch, watchEffect } from 'vue'
 import { ElMessage, ElPopover, ElInputNumber, ElDialog } from 'element-plus'
-import { Box, ShoppingBag, Delete, VideoPlay, VideoPause, Clock, Sunrise, Calendar, Document } from '@element-plus/icons-vue'
+import { Box, ShoppingBag, Delete, VideoPlay, VideoPause, Clock, Sunrise, Calendar, Document, User, ArrowDown, Money } from '@element-plus/icons-vue'
 
 
 // 在线角色数 与 点卡价格 ------------------
@@ -315,7 +332,6 @@ const getOnlineTime = () => {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
   const seconds = Math.floor((diff % (1000 * 60)) / 1000)
   const onlineTime = hours + minutes / 60 + seconds / 3600
-  console.log(onlineTime)
   todaysData.value.onlineTime += onlineTime
   // 当日在线列表记录
   const data = {
@@ -564,161 +580,223 @@ watch(selectedItems, () => {
 
 
 </script>
+<style scoped lang="less">
+@import '../styles/variables.less';
+@import '../styles/mixins.less';
 
-<style>
-.el-popper.is-light.el-tooltip.el-popover {
-  padding: 0;
-  border-radius: 6px;
-}
-
-.custom-dialog.el-dialog.el-dialog--center {
-  min-width: 450px;
-  padding: 0;
-}
-
-.custom-dialog.el-dialog.el-dialog--center .el-dialog__header {
-  padding: 12px 16px !important;
-}
-
-.custom-dialog.el-dialog.el-dialog--center .el-dialog__title {
-  font-size: 16px !important;
-  font-weight: 400 !important;
-  color: #2c3e50 !important;
-}
-
-.custom-dialog.el-dialog.el-dialog--center .el-dialog__body {
-  padding: 16px;
-}
-
-.custom-dialog.el-dialog.el-dialog--center .el-dialog__footer {
-  padding: 0px 16px 24px 16px;
-}
-</style>
-<style scoped>
 .online-record {
-  height: calc(100% - 32px);
-  margin: 16px;
+  width: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 0;
+  margin: 0;
 }
 
 .record-card {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: @glass-bg-light;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid @glass-border;
+  .card-shadow(0.06);
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  
+  // 覆盖全局的 ::before 伪元素
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(255, 255, 255, 0.3) 20%, 
+      rgba(255, 255, 255, 0.4) 50%, 
+      rgba(255, 255, 255, 0.3) 80%, 
+      transparent 100%);
+    border-radius: 24px 24px 0 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  // 确保内部元素也遵循圆角
+  :deep(.el-card__header),
+  :deep(.el-card__body) {
+    border-radius: inherit;
+  }
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-
-.header-actions {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
-.online-duration {
-  font-size: 18px;
-  color: #389e0d;
-  font-weight: 400;
-  padding-right: 16px;
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
 }
 
-.setting-button {
-  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
-  border-color: #eee;
-  color: white;
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  padding: 10px @spacing-lg;
+  .glass-effect(@blur-light, @glass-bg, @glass-border-hover);
+  border-radius: @radius-normal;
+  cursor: pointer;
+  .transition();
+  min-width: 140px;
+  
+  &:hover {
+    background: @glass-bg-hover;
+    border-color: @glass-border-hover;
+    .card-shadow-hover(0.1);
+  }
+}
+
+.setting-icon {
+  font-size: 18px;
+  color: @color-primary;
+}
+
+.setting-label {
+  font-size: 14px;
+  color: @text-primary;
+  font-weight: 500;
+}
+
+.setting-value {
+  font-size: 14px;
+  color: @text-primary;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.setting-arrow {
+  font-size: 12px;
+  color: @text-secondary;
+  .transition(transform);
+}
+
+.setting-item:hover .setting-arrow {
+  transform: translateY(2px);
 }
 
 .setting-popover {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  animation: popoverSlideIn 0.2s ease-out;
+  padding: @spacing-xl;
+  .glass-effect(@blur-light, rgba(255, 255, 255, 0.95), @glass-border);
+  border-radius: @radius-normal;
+  .card-shadow-hover(0.15);
 }
-
-.input-number {
-  margin-left: 8px;
-  text-align: center;
-  outline: none;
-  border-radius: 8px;
-  border: 1px solid #dcdfe6;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.input-number:hover {
-  border-color: #c0c4cc;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-}
-
-.input-number:focus-within {
-  border-color: #c0c4cc;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-}
-
-.input-number .el-input__inner {
-  border-radius: 8px;
-  text-align: center;
-  font-size: 14px;
-  padding: 8px 12px;
-}
-
-@keyframes popoverSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
 
 .setting-title {
   font-size: 16px;
-  color: #1f2329;
-  margin-bottom: 16px;
+  color: @text-primary;
+  margin-bottom: @spacing-lg;
   text-align: center;
+  font-weight: 600;
 }
 
-.setting-button {
-  transition: all 0.3s ease;
+.setting-input {
+  width: 100%;
+
+  :deep(.el-input__wrapper) {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  :deep(.el-input__wrapper:hover) {
+    border-color: rgba(255, 107, 107, 0.5);
+  }
+
+  :deep(.el-input__wrapper.is-focus) {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+  }
 }
 
-.setting-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+.online-status {
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  padding: 10px @spacing-lg;
+  background: rgba(82, 196, 26, 0.1);
+  border: 1px solid rgba(82, 196, 26, 0.2);
+  border-radius: @radius-normal;
 }
 
-.action-button {
-  padding: 12px 24px;
-  font-weight: 500;
-  padding: 20px 24px;
-  border-color: #eee;
+.status-icon {
+  font-size: 18px;
+  color: @color-success;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.status-text {
+  font-size: 14px;
+  color: @color-success;
+  font-weight: 600;
+}
+
+.control-button {
+  padding: @spacing-md @spacing-xxl;
+  font-weight: 600;
+  border-radius: @radius-normal;
+  display: flex;
+  align-items: center;
+  gap: @spacing-sm;
+  .transition();
+
+  .el-icon {
+    font-size: 18px;
+  }
 }
 
 .start-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
+  background: linear-gradient(135deg, @color-primary 0%, #ee5a24 100%);
+  border: none;
 
-.start-button .el-icon,
-.end-button .el-icon {
-  margin-right: 6px;
+  &:hover {
+    background: linear-gradient(135deg, #ff7b7b 0%, #ff6a3a 100%);
+    .card-shadow-hover(0.4);
+  }
 }
 
 .end-button {
-  background: linear-gradient(135deg, #722ed1 0%, #531dab 100%)
+  background: linear-gradient(135deg, @color-danger 0%, #cf1322 100%);
+  border: none;
+
+  &:hover {
+    background: linear-gradient(135deg, #ff6b6d 0%, #ff2d2f 100%);
+    .card-shadow-hover(0.4);
+  }
 }
 
 /* 快速记录样式 */
@@ -741,19 +819,78 @@ watch(selectedItems, () => {
 .quick-record .item-selection-card,
 .quick-record .selected-items-card {
   height: calc(100vh - 300px);
-  border-radius: 6px !important;
+  border-radius: @radius-normal;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: none !important;
-  border: 1px solid #eee !important;
+  .transition();
+  background: transparent;
+  border: 1px solid @glass-border;
+  .card-shadow(0.1);
   display: flex;
   flex-direction: column;
+  
+  :deep(.el-card__header) {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: @spacing-md @spacing-lg;
+    border-radius: @radius-normal @radius-normal 0 0;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    box-shadow: none;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 100%);
+      pointer-events: none;
+    }
+  }
+  
+  :deep(.el-card__body) {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0 0 @radius-normal @radius-normal;
+  }
 }
 
+.record-card :deep(.el-card__header) {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px 24px 0 0;
+  box-shadow: none;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
 
-.quick-record .item-selection-card :deep(.el-card__header),
-.quick-record .selected-items-card :deep(.el-card__header) {
-  padding: 12px 16px !important;
+.record-card :deep(.el-card__body) {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0 0 24px 24px;
+  box-shadow: 
+    0 -4px 16px rgba(0, 0, 0, 0.08),
+    0 -2px 8px rgba(0, 0, 0, 0.05),
+    0 12px 40px rgba(0, 0, 0, 0.05),
+    inset 0 2px 6px rgba(255, 255, 255, 0.15),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1;
+  margin: 0 4px 4px 4px;
 }
 
 .quick-record .item-selection-card :deep(.el-card__body),
@@ -769,8 +906,8 @@ watch(selectedItems, () => {
 
 .quick-record .item-selection-card:hover,
 .quick-record .selected-items-card:hover {
-  transform: translateY(-2px);
-  box-shadow: none !important;
+  .card-shadow-hover(0.12);
+  border-color: @glass-border-hover;
 }
 
 /* 卡片头部样式 */
@@ -785,13 +922,13 @@ watch(selectedItems, () => {
 .section-icon {
   width: 28px;
   height: 28px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 8px;
+  background: linear-gradient(135deg, @color-primary 0%, #ee5a24 100%);
+  border-radius: @radius-small;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  .card-shadow-hover(0.3);
 }
 
 .section-info {
@@ -801,14 +938,14 @@ watch(selectedItems, () => {
 .section-title {
   font-size: 16px;
   font-weight: 500;
-  color: #2c3e50;
+  color: @text-primary;
   margin: 0 0 2px 0;
   line-height: 1.2;
 }
 
 .section-subtitle {
   font-size: 12px;
-  color: #7f8c8d;
+  color: @text-secondary;
   margin: 0;
   font-weight: 400;
 }
@@ -828,23 +965,23 @@ watch(selectedItems, () => {
 }
 
 .clear-button {
-  padding: 4px !important;
+  padding: @spacing-xs;
   height: 28px;
   width: 28px;
 }
 
 .header-total-label {
   font-size: 14px;
-  color: #7f8c8d;
+  color: @text-secondary;
   font-weight: 400;
 }
 
 .header-total-value {
   font-size: 16px;
   font-weight: 600;
-  color: #52c41a;
+  color: @color-success;
   background: rgba(82, 196, 26, 0.1);
-  padding: 4px 8px;
+  padding: @spacing-xs @spacing-sm;
   border-radius: 6px;
   line-height: 1;
 }
@@ -876,28 +1013,31 @@ watch(selectedItems, () => {
 
 
 .card-text-tip {
-  padding: 0px;
-  margin: 8px 0;
+  padding: 0;
+  margin: @spacing-sm 0;
   font-size: 13px;
-  color: #764ba2;
+  color: #6b46c1;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .item-card {
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 6px 4px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
   width: 72px;
   height: 80px;
-  background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
-}
-
-.item-card:hover {
-  border-color: #764ba280;
+  padding: 6px @spacing-xs;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  .glass-effect(@blur-light, @glass-bg-light, rgba(255, 255, 255, 0.3));
+  border-radius: @radius-small;
+  .transition();
+  
+  &:hover {
+    border-color: rgba(255, 107, 107, 0.6);
+    background: @glass-bg-hover;
+    .card-shadow-hover(0.2);
+  }
 }
 
 .item-card:hover::before {
@@ -926,8 +1066,8 @@ watch(selectedItems, () => {
   position: relative;
   z-index: 1;
   font-size: 14px;
-  color: #2c3e50;
-  margin-bottom: 4px;
+  color: @text-primary;
+  margin-bottom: @spacing-xs;
   font-weight: 500;
   line-height: 1.1;
   text-align: center;
@@ -938,10 +1078,10 @@ watch(selectedItems, () => {
   position: relative;
   z-index: 1;
   font-size: 10px;
-  color: #52c41a;
+  color: @color-success;
   font-weight: 600;
   background: rgba(82, 196, 26, 0.1);
-  padding: 1px 4px;
+  padding: 1px @spacing-xs;
   border-radius: 3px;
   display: inline-block;
   flex-shrink: 0;
@@ -951,10 +1091,10 @@ watch(selectedItems, () => {
   position: relative;
   z-index: 1;
   font-size: 10px;
-  color: #faad14;
+  color: @color-warning;
   font-weight: 500;
   background: rgba(250, 173, 20, 0.1);
-  padding: 1px 4px;
+  padding: 1px @spacing-xs;
   border-radius: 3px;
   display: inline-block;
   flex-shrink: 0;
@@ -987,26 +1127,29 @@ watch(selectedItems, () => {
 
 .empty-state {
   text-align: center;
-  padding: 30px 15px;
-  color: #7f8c8d;
+  padding: @spacing-xxl @spacing-lg;
+  color: @text-secondary;
 }
 
 .empty-icon {
-  color: #d9d9d9;
-  margin-bottom: 16px;
+  color: @text-tertiary;
+  margin-bottom: @spacing-lg;
+  opacity: 0.6;
 }
 
 .empty-text {
   font-size: 16px;
   font-weight: 500;
-  color: #7f8c8d;
-  margin: 0 0 8px 0;
+  color: @text-secondary;
+  margin: 0 0 @spacing-sm 0;
+  letter-spacing: 0.2px;
 }
 
 .empty-hint {
   font-size: 14px;
-  color: #bfbfbf;
+  color: @text-tertiary;
   margin: 0;
+  opacity: 0.8;
 }
 
 .selected-item {
@@ -1014,17 +1157,16 @@ watch(selectedItems, () => {
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.selected-item:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  border-color: #667eea;
+  .glass-effect(@blur-light, @glass-bg, @glass-border);
+  border-radius: @radius-small;
+  margin-bottom: @spacing-sm;
+  .transition();
+  
+  &:hover {
+    .card-shadow-hover(0.18);
+    border-color: rgba(255, 107, 107, 0.5);
+    background: rgba(255, 255, 255, 0.4);
+  }
 }
 
 .selected-item-info {
@@ -1058,15 +1200,15 @@ watch(selectedItems, () => {
 
 .selected-item-name {
   font-size: 14px;
-  color: #2c3e50;
+  color: @text-primary;
   font-weight: 500;
-  margin-bottom: 4px;
+  margin-bottom: @spacing-xs;
   line-height: 1.2;
 }
 
 .selected-item-price {
   font-size: 13px;
-  color: #52c41a;
+  color: @color-success;
   font-weight: 600;
 }
 
@@ -1088,10 +1230,13 @@ watch(selectedItems, () => {
   display: flex;
   align-items: center;
   gap: 20px;
-  background: linear-gradient(135deg, #f8f9ff 0%, #f0f7ff 100%);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   padding: 20px;
   border-radius: 16px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   width: 90%;
 }
 
@@ -1101,11 +1246,11 @@ watch(selectedItems, () => {
   align-items: center;
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #fafbff 0%, #f0f4ff 100%);
-  border-radius: 12px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-  padding: 8px;
+  .glass-effect(@blur-light, rgba(255, 255, 255, 0.3), rgba(255, 107, 107, 0.3));
+  border-radius: @radius-normal;
+  border-width: 2px;
+  .card-shadow-hover(0.2);
+  padding: @spacing-sm;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -1117,7 +1262,8 @@ watch(selectedItems, () => {
 }
 
 .dialog-icon {
-  color: #667eea;
+  color: #6366f1;
+  opacity: 0.9;
 }
 
 .dialog-item-details {
@@ -1129,7 +1275,7 @@ watch(selectedItems, () => {
 
 .dialog-item-name {
   font-size: 20px;
-  color: #2c3e50;
+  color: @text-primary;
   font-weight: 400;
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -1147,31 +1293,41 @@ watch(selectedItems, () => {
   /* background-color: #fff; */
 }
 
-.custom-input-number :deep(.el-input__wrapper) {
-  border-radius: 0 !important;
-  background: linear-gradient(135deg, #ffffff 0%, #f9faff 100%);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(102, 126, 234, 0.2) !important;
-  transition: all 0.3s ease;
-  padding: 6px 8px;
-}
-
-.custom-input-number :deep(.el-input__inner) {
-  font-size: 18px !important;
-}
-
-.custom-input-number :deep(.el-input__wrapper):hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(102, 126, 234, 0.4) !important;
-}
-
-.custom-input-number :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(102, 126, 234, 0.6) !important;
+.custom-input-number {
+  :deep(.el-input__wrapper) {
+    border-radius: 0;
+    .glass-effect(@blur-light, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+    box-shadow: 
+      @shadow-sm,
+      0 0 0 1px rgba(255, 107, 107, 0.3);
+    .transition();
+    padding: 6px @spacing-sm;
+  }
+  
+  :deep(.el-input__inner) {
+    font-size: 18px;
+  }
+  
+  :deep(.el-input__wrapper:hover) {
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 
+      @shadow-md,
+      0 0 0 1px rgba(255, 107, 107, 0.4);
+  }
+  
+  :deep(.el-input__wrapper.is-focus) {
+    background: rgba(255, 255, 255, 0.45);
+    box-shadow: 
+      @shadow-md,
+      0 0 0 1px rgba(255, 107, 107, 0.6);
+  }
 }
 
 .price-prefix {
-  color: #764ba2;
+  color: #6b46c1;
   font-weight: 600;
   font-size: 18px;
-  margin-right: 4px;
+  margin-right: @spacing-xs;
 }
 
 .dialog-btn {
@@ -1183,8 +1339,8 @@ watch(selectedItems, () => {
 }
 
 .dialog-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  opacity: 0.9;
 }
 
 .cancel-btn {
@@ -1193,7 +1349,7 @@ watch(selectedItems, () => {
 }
 
 .confirm-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, @color-primary 0%, #ee5a24 100%);
   border-color: transparent;
 }
 
@@ -1209,80 +1365,95 @@ watch(selectedItems, () => {
 
 /* 统计卡片 */
 .stats-container {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .stat-card {
   display: flex;
   align-items: center;
-  padding: 16px 10px;
-  border-radius: 12px;
-  color: white;
+  padding: @spacing-xl;
+  border-radius: @radius-large;
+  .glass-effect(@blur-light, @glass-bg, @glass-border);
+  .card-shadow(0.08);
+  .transition();
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  pointer-events: none;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  
+  &:hover {
+    background: @glass-bg-hover;
+    border-color: @glass-border-hover;
+    .card-shadow-hover(0.12);
+  }
 }
 
 .stat-card.total {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  .stat-icon {
+    background: linear-gradient(135deg, rgba(82, 196, 26, 0.15) 0%, rgba(56, 158, 13, 0.15) 100%);
+    color: #52c41a;
+  }
 }
 
 .stat-card.today {
-  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+  .stat-icon {
+    background: linear-gradient(135deg, rgba(24, 144, 255, 0.15) 0%, rgba(9, 109, 217, 0.15) 100%);
+    color: #1890ff;
+  }
 }
 
 .stat-card.weekly {
-  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  .stat-icon {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%);
+    color: #ffc107;
+  }
 }
 
 .stat-card.count {
-  background: linear-gradient(135deg, #722ed1 0%, #531dab 100%);
+  .stat-icon {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(238, 90, 36, 0.15) 100%);
+    color: #ff6b6b;
+  }
 }
 
 .stat-icon {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: @radius-normal;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 4px;
-  margin-left: 8px;
-  backdrop-filter: blur(10px);
+  margin-right: @spacing-lg;
+  .glass-effect(@blur-light, transparent, transparent);
+  .card-shadow(0.06);
+  flex-shrink: 0;
+  .transition();
+  position: relative;
+  z-index: 2;
+  
+  .stat-card:hover & {
+    transform: scale(1.05);
+    .card-shadow-hover(0.1);
+  }
 }
 
 .stat-content {
   flex: 1;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .stat-number {
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 4px;
-  line-height: 1;
+  font-size: 28px;
+  font-weight: 700;
+  color: @text-primary;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
 }
 
 .stat-label {
-  font-size: 12px;
-  opacity: 0.9;
-  font-weight: 500;
+  font-size: 14px;
+  color: @text-primary;
+  font-weight: 600;
+  opacity: 0.85;
 }
 </style>

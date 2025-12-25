@@ -1,0 +1,47 @@
+/**
+ * 样式混入
+ */
+
+@import './variables.less';
+
+// 毛玻璃效果
+.glass-effect(@blur: 5px, @bg: rgba(255, 255, 255, 0.25), @border: rgba(255, 255, 255, 0.2)) {
+  background: @bg;
+  backdrop-filter: blur(@blur);
+  -webkit-backdrop-filter: blur(@blur);
+  border: 1px solid @border;
+}
+
+// 卡片阴影混入
+.card-shadow(@intensity: 0.08) {
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, @intensity),
+    0 2px 8px rgba(0, 0, 0, @intensity * 0.5);
+}
+
+// 卡片 hover 阴影混入
+.card-shadow-hover(@intensity: 0.12) {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, @intensity),
+    0 4px 12px rgba(0, 0, 0, @intensity * 0.67);
+}
+
+// 过渡动画混入
+.transition(@property: all, @duration: 0.3s) {
+  transition: @property @duration cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// 白色光晕混入
+.white-glow(@intensity: 0.2) {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, @intensity * 1.5),
+    0 0 20px rgba(255, 255, 255, @intensity);
+}
+
+// 白色光晕 hover 混入
+.white-glow-hover(@intensity: 0.3) {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, @intensity * 1.33),
+    0 0 30px rgba(255, 255, 255, @intensity);
+}
+

@@ -6,22 +6,17 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import App from './App.vue'
 import router from './router'
-// import { initPWA } from './utils/pwa.js'
+import './styles/theme.css'
+import './styles/global.less'
 
 const app = createApp(App)
 
-// 注册所有图标
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+Object.entries(ElementPlusIconsVue).forEach(([key, component]) => {
   app.component(key, component)
-}
+})
 
 app.use(createPinia())
 app.use(router)
-app.use(ElementPlus, {
-  locale: zhCn,
-})
+app.use(ElementPlus, { locale: zhCn })
 
 app.mount('#app')
-
-// 初始化 PWA（不显示自动安装提醒）
-// initPWA()

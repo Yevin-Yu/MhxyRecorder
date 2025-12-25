@@ -439,7 +439,8 @@ const handleCurrentChange = (val) => {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+@import '../styles/variables.less';
 .trade-record {
   height: calc(100% - 48px);
   margin: 24px;
@@ -463,13 +464,13 @@ const handleCurrentChange = (val) => {
 .header-title {
   font-size: 20px;
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
   margin-bottom: 4px;
 }
 
 .header-subtitle {
   font-size: 14px;
-  color: #7f8c8d;
+  color: @text-secondary;
   font-weight: 400;
 }
 
@@ -510,8 +511,9 @@ const handleCurrentChange = (val) => {
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  opacity: 0.95;
 }
 
 .stat-card.income {
@@ -625,7 +627,7 @@ const handleCurrentChange = (val) => {
 
 .trade-form .el-form-item__label {
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
 }
 
 .trade-type-group {
@@ -639,96 +641,4 @@ const handleCurrentChange = (val) => {
   gap: 12px;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .stats-container .el-col {
-    margin-bottom: 16px;
-  }
-
-  .stat-card {
-    padding: 20px;
-  }
-
-  .stat-number {
-    font-size: 28px;
-  }
-
-  .header-title {
-    font-size: 18px;
-  }
-
-  .action-button {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-
-  .filter-container {
-    padding: 16px;
-  }
-
-  .filter-actions {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .filter-btn {
-    width: 100%;
-  }
-
-  .card-header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
-  .header-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .stat-card {
-    padding: 16px;
-  }
-
-  .stat-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 12px;
-  }
-
-  .stat-number {
-    font-size: 24px;
-  }
-
-  .stat-label {
-    font-size: 12px;
-  }
-
-  .header-title {
-    font-size: 16px;
-  }
-
-  .header-subtitle {
-    font-size: 12px;
-  }
-
-  .action-button {
-    padding: 8px 16px;
-    font-size: 12px;
-  }
-
-  .filter-container {
-    padding: 12px;
-  }
-
-  .filter-container .el-row {
-    margin: 0 !important;
-  }
-
-  .filter-container .el-col {
-    margin-bottom: 12px;
-  }
-}
 </style>

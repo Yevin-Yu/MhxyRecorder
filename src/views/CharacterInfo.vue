@@ -342,7 +342,8 @@ const handleCurrentChange = (val) => {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+@import '../styles/variables.less';
 .character-info {
   height: calc(100% - 48px);
   margin: 24px;
@@ -386,13 +387,13 @@ const handleCurrentChange = (val) => {
 .header-title {
   font-size: 18px;
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
   margin-bottom: 4px;
 }
 
 .header-subtitle {
   font-size: 14px;
-  color: #7f8c8d;
+  color: @text-secondary;
   font-weight: 400;
 }
 
@@ -458,7 +459,7 @@ const handleCurrentChange = (val) => {
 .section-title {
   font-size: 16px;
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
   margin-bottom: 16px;
   padding-bottom: 8px;
   border-bottom: 2px solid #f0f0f0;
@@ -481,17 +482,17 @@ const handleCurrentChange = (val) => {
 
 .attribute-item:hover {
   background: #e9ecef;
-  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .attribute-label {
   font-weight: 500;
-  color: #6c757d;
+  color: @text-tertiary;
 }
 
 .attribute-value {
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
   font-size: 16px;
 }
 
@@ -515,13 +516,12 @@ const handleCurrentChange = (val) => {
 
 .equipment-slot:hover {
   background: #e9ecef;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 .slot-header {
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
   margin-bottom: 12px;
   text-align: center;
 }
@@ -538,7 +538,7 @@ const handleCurrentChange = (val) => {
 
 .equipment-item.empty {
   background: #f8f9fa;
-  color: #6c757d;
+  color: @text-tertiary;
   border: 1px dashed #dee2e6;
 }
 
@@ -568,7 +568,7 @@ const handleCurrentChange = (val) => {
 
 .equipment-name {
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
   font-size: 14px;
 }
 
@@ -593,7 +593,7 @@ const handleCurrentChange = (val) => {
 
 .character-form .el-form-item__label {
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
 }
 
 .dialog-footer {
@@ -610,100 +610,4 @@ const handleCurrentChange = (val) => {
   border-top: 1px solid #f0f0f0;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-
-  .character-card,
-  .attributes-card {
-    margin-bottom: 20px;
-  }
-
-  .character-avatar {
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-  }
-
-  .character-details {
-    align-items: center;
-  }
-
-  .attributes-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  .equipment-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-
-  .header-title {
-    font-size: 18px;
-  }
-
-  .action-button {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-
-  .card-header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
-  .header-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .character-avatar {
-    padding: 20px;
-  }
-
-  .avatar-container {
-    width: 80px;
-    height: 80px;
-  }
-
-  .level-badge {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-  }
-
-  .character-name {
-    font-size: 20px;
-  }
-
-  .character-school {
-    font-size: 14px;
-  }
-
-  .attributes-grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
-  .equipment-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
-  .header-title {
-    font-size: 16px;
-  }
-
-  .header-subtitle {
-    font-size: 12px;
-  }
-
-  .action-button {
-    padding: 8px 16px;
-    font-size: 12px;
-  }
-}
 </style>

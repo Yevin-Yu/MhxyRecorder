@@ -286,7 +286,8 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+@import '../styles/variables.less';
 .pwa-settings {
   max-width: 800px;
   margin: 0 auto;
@@ -310,13 +311,13 @@ onMounted(async () => {
 .header-title {
   font-size: 20px;
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
   margin-bottom: 4px;
 }
 
 .header-subtitle {
   font-size: 14px;
-  color: #7f8c8d;
+  color: @text-secondary;
   font-weight: 400;
 }
 
@@ -357,14 +358,14 @@ onMounted(async () => {
 
 .status-title {
   font-size: 14px;
-  color: #7f8c8d;
+  color: @text-secondary;
   margin-bottom: 4px;
 }
 
 .status-value {
   font-size: 18px;
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
 }
 
 .pwa-features {
@@ -374,7 +375,7 @@ onMounted(async () => {
 .pwa-features h3 {
   font-size: 18px;
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
   margin-bottom: 20px;
   padding-bottom: 8px;
   border-bottom: 2px solid #e9ecef;
@@ -403,13 +404,13 @@ onMounted(async () => {
 .feature-info h4 {
   font-size: 16px;
   font-weight: 600;
-  color: #2c3e50;
+  color: @text-primary;
   margin: 0 0 4px 0;
 }
 
 .feature-info p {
   font-size: 14px;
-  color: #7f8c8d;
+  color: @text-secondary;
   margin: 0;
 }
 
@@ -439,7 +440,7 @@ onMounted(async () => {
 
 .cache-name {
   font-weight: 500;
-  color: #2c3e50;
+  color: @text-primary;
 }
 
 .cache-count {
@@ -449,13 +450,13 @@ onMounted(async () => {
 
 .cache-empty {
   text-align: center;
-  color: #7f8c8d;
+  color: @text-secondary;
   padding: 40px 0;
 }
 
 .cache-empty .el-icon {
   margin-bottom: 16px;
-  color: #bdc3c7;
+  color: @text-tertiary;
 }
 
 .cache-empty p {
@@ -463,83 +464,4 @@ onMounted(async () => {
   font-size: 16px;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .pwa-status .el-col {
-    margin-bottom: 16px;
-  }
-  
-  .status-card {
-    padding: 16px;
-  }
-  
-  .status-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 12px;
-  }
-  
-  .status-value {
-    font-size: 16px;
-  }
-  
-  .feature-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-  
-  .feature-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
-  
-  .header-title {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .status-card {
-    padding: 12px;
-  }
-  
-  .status-icon {
-    width: 36px;
-    height: 36px;
-    margin-right: 8px;
-  }
-  
-  .status-title {
-    font-size: 12px;
-  }
-  
-  .status-value {
-    font-size: 14px;
-  }
-  
-  .feature-item {
-    padding: 16px;
-  }
-  
-  .feature-info h4 {
-    font-size: 14px;
-  }
-  
-  .feature-info p {
-    font-size: 12px;
-  }
-  
-  .header-title {
-    font-size: 16px;
-  }
-  
-  .header-subtitle {
-    font-size: 12px;
-  }
-  
-  .pwa-features h3 {
-    font-size: 16px;
-  }
-}
 </style>
