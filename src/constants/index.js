@@ -4,8 +4,7 @@
 
 export const STORAGE_KEYS = {
   BACKGROUND: 'mh-background',
-  ONLINE_RECORD: 'mh-online-record',
-  ITEM_PRICES: 'mh-item-prices',
+  CURRENT_SET_DATA: 'mh-current-set-data',
   TODAYS_DATA: 'mh-todays-data',
   ALL_DATA: 'mh-all-data',
   ITEMS_DATA: 'mh-items-data',
@@ -20,6 +19,12 @@ export const DEFAULT_CONFIG = {
   MIN_CARD_PRICE: 1000,
   CARD_PRICE_STEP: 1000
 }
+
+// 点卡消耗计算系数（每小时6点）
+export const CARD_COST_MULTIPLIER = 6
+
+// 未设置价格物品的 ID 起始值
+export const UNSET_ITEMS_START_ID = 99
 
 export const ROUTES = {
   HOME: '/',

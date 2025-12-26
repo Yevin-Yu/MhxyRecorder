@@ -101,14 +101,38 @@ onMounted(() => {
     0 8px 32px rgba(0, 0, 0, 0.1),
     0 4px 16px rgba(0, 0, 0, 0.06);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: @text-primary;
+
+  :deep(.el-icon) {
+    color: @text-primary;
+    transition: color 0.3s ease;
+  }
 }
 
 .switcher-button:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.35);
+  border-color: @color-primary;
   box-shadow: 
-    0 16px 48px rgba(0, 0, 0, 0.2),
+    0 16px 48px rgba(255, 107, 107, 0.25),
     0 8px 24px rgba(0, 0, 0, 0.12);
-  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+
+  :deep(.el-icon) {
+    color: @color-primary;
+  }
+}
+
+.switcher-button:active,
+.switcher-button:focus {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: @color-primary;
+  box-shadow: 
+    0 0 0 3px rgba(255, 107, 107, 0.2),
+    0 8px 24px rgba(255, 107, 107, 0.3);
+  
+  :deep(.el-icon) {
+    color: @color-primary;
+  }
 }
 
 .switcher-content {

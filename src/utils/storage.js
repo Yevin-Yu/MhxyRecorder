@@ -1,8 +1,6 @@
 /**
  * LocalStorage 工具函数
  */
-import { STORAGE_KEYS } from '../constants'
-
 export function getStorage(key, defaultValue = null) {
   try {
     const item = localStorage.getItem(key)
@@ -35,12 +33,5 @@ export function clearStorage() {
   } catch (error) {
     console.error('清空存储失败:', error)
   }
-}
-
-export const storage = {
-  get: getStorage,
-  set: setStorage,
-  remove: removeStorage,
-  clear: clearStorage
 }
 

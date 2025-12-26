@@ -442,8 +442,6 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   background: rgba(255, 255, 255, 0.25) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.06),
@@ -452,12 +450,20 @@ onMounted(() => {
   position: relative;
 }
 
+.record-card :deep(.el-card__header) {
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
 .record-card :deep(.el-card__body) {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   padding: 20px;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .card-header {
